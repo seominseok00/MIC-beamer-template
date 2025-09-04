@@ -58,7 +58,7 @@
 %         Colors and Macros
 % ============================================
 
-% https://latexcolor.com % color list
+% https://latexcolor.com % colo r list 
 \definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
 \definecolor{awesome}{rgb}{1.0, 0.13, 0.32}
 \newcommand{\ctxt}[2]{{\color{#1}{#2}\color{black}}}
@@ -69,10 +69,10 @@
 %         Title Page
 % ============================================
 \title{
-    Safe Reinforcement Learning
+    Constrained Reinforcement Learning
 } 
 \subtitle{
-    % \textit{Where}\\
+    \textit{2025 MIC Symposium}\\
 }
 \author{
   \textbf{\cblue{Minseok Seo}}\inst{1},  % Emphasize the presenter!
@@ -90,6 +90,7 @@
 \setbeamerfont{institute}{size=\normalsize}
 
 \titlegraphic{\logoTopRight}
+
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \AtBeginSection[]{%
@@ -112,14 +113,27 @@
 % }
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
 \begin{document}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \titlepage 
 
+
 \begin{frame}{Outline}
   \tableofcontents
 \end{frame}
+
+\note[enumerate]
+{
+  \item Hello everyone, I am Minseok.
+  \item I'm currently working as a part-time researcher.
+  \item Today, I would like to briefly introduce the research I have been working on.
+  \item Before I begin, please understand if I say something strange, because I'm not goot at speaking in English.
+  \item So, let's get started.
+  \item The order of my presentation is as follows.
+}
+
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 % ============================================
@@ -131,6 +145,12 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \subsection{Motivation}
+
+
+\note[enumerate]
+{
+  \item First, the introduction.
+}
 
 \begin{frame}{\insertsubsectionhead}{Autonomous Driving}
 
@@ -150,8 +170,9 @@
 
 \note[enumerate]
 {
-  \item You can add notes like this.
-  \item These notes will not be shown in the presentation.
+  \item When I was young, I really liked cars and was very interested in self-driving technology.
+  \item Currently, I think the most well-known companies in autonomous driving are Waymo and Tesla.
+  \item Since more information is available about Tesla, I will focus on Tesla in my presentation.
 }
 
 \begin{frame}{\insertsubsectionhead}{Supervised Learning}
@@ -166,6 +187,12 @@
   }
 \end{frame}
 
+\note[enumerate]
+{
+  \item Tesla pursues an approach where data from cameras is processed by a neural network, and then used to generate the appropriate control inputs in an end-to-end manner.
+  \item To achieve this, they use a large amount of human-labeled data to train the neural network.
+}
+
 \begin{frame}{\insertsubsectionhead}{Supervised Learning}
 
   {
@@ -179,13 +206,20 @@
       \begin{itemize}
         \item <2-> Supervised learning requires \textcolor{red}{a large amount of labeled data.}
         \item <3-> Since it is created by humans, it is \textcolor{red}{expensive.}
-        \item <4-> The performance of supervised learning is \textcolor{red}{limited by human-labeled data.}
+        \item <4-> The performance of supervised learning is \textcolor{red}{depends on human-labeled data.}
       \end{itemize}
     }
   }
 
 \end{frame}
 
+\note[enumerate]
+{
+  \item To support this, about four years ago, Tesla posted job openings on LinkedIn for data labeling.
+  \item Supervised learning is effective, but it requires a large amount of data.
+  \item Since the labels are made by humans, it is also very costly, and the performance of supervised learning depends on human-labeled data.
+  \item Therefore, it is difficult for academic labs like ours to use this approach.
+}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \subsection{Reinforcement Learning (RL)}
@@ -227,6 +261,12 @@
 
 \end{frame}
 
+\note[enumerate]
+{
+  \item Because of these reasons, and with the progress of reinforcement learning, many studies are now trying to apply reinforcement learning to various real-world problems.
+  \item I am also conducing research on reinforcement learning.
+}
+
 \begin{frame}{\insertsubsectionhead}
 
   \begin{figure}
@@ -235,6 +275,15 @@
   \end{figure}
 
 \end{frame}
+
+\note[enumerate]
+{
+  \item This is an overview of the reinforcement learning framework.
+  \item The agent observes the current state from the environment and based on this state, the policy decides an action.
+  \item Then, agent takes this action, and as a result, the agent receives a reward from the environment.
+  \item By repeating this process, agent learns a policy that maximizes the cumulative reward.
+}
+
 
 \begin{frame}{\insertsubsectionhead}
 
@@ -245,15 +294,14 @@
 
 \end{frame}
 
+\note[enumerate]
+{
+  \item This illustration describes the process over time.
+  \item At each time step, the agent takes an action and receives a reward.
+  \item In this example, we want to learn a policy to avoid obstacles, so stepping on an obstacle is defined to give a negative reward.
+  \item Agent receives a positive reward as it approaches the goal.
+}
 
-\begin{frame}{\insertsubsectionhead}
-
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{figures/reward-engineering.pdf}
-    \caption{Illustration of reward engineering: shaping the reward signal to guide the agent's learning process.}
-  \end{figure}
-
-\end{frame}
 
 \begin{frame}{\insertsubsectionhead}{Objective of RL}
   \begin{itemize}
@@ -270,16 +318,23 @@
 
 \end{frame}
 
+\note[enumerate]
+{
+  \item If we represent this process with equations, it can be written as follows.
+  \item First, we assume that the policy is parameterized by theta.
+  \item Our goal is to find a policy pi with parameters theta that maximizes the cumulative reward.
+}
+
 
 \begin{frame}{\insertsubsectionhead}{Challenges of RL}
 
   \begin{enumerate}
-    \item<1-> Needs \textcolor{red}{simulation}, not labeled data
-    \item<2-> Works in simulation, but may fail in the real world
+    \item<2-> \textcolor{red}{Reward engineering} can induce desired behaviors (multi-objective), but it is time-consuming and difficult
+    \item<3-> Even with reward engineering, the agent may still take \textcolor{red}{unsafe actions}
       \begin{itemize}
-        \item<2-> Even after training, the agent may still take \textcolor{red}{unsafe actions}
+        \item<3-> Reward hacking  \cite{weng2024rewardhack}
+        \item <3-> Out-of-distribution cases (unseen during training)
       \end{itemize}
-    \item<3-> \textcolor{red}{Reward engineering} can induce desired behaviors (multi-objective), but it is time-consuming and difficult
   \end{enumerate}
 
   \uncover<4->{
@@ -289,21 +344,16 @@
   }
 \end{frame}
 
-% \begin{frame}{\insertsubsectionhead}
-
-%   \begin{enumerate}
-%     \item <1-> RL does not require labeled data; instead, \textcolor{red}{it needs simulation.}
-%     \item <2-> Even if works well in simulation, \textcolor{red}{it may not performs as expected in the real world.}
-%     \item <3-> Through reward engineering, desired behaviors (multi-objective) can be induced, but \textcolor{red}{this is a very time-consuming and difficult task.}
-%   \end{enumerate}
-
-%   \uncover<4->{
-%     \begin{block}{My research}
-%       Challenge 3: learning policies that achieve objectives while satisfying constraints, without relying on reward engineering.
-%     \end{block}
-%   }
-
-% \end{frame}
+\note[enumerate]
+{
+  \item However, reinforcement learning also faces several challenges.
+  \item Among them, I will focus on two challenges.
+  \item First, to make the agent learn the desired behavior, reward engineering is required.
+  \item However, it is very difficult and time-consuming.
+  \item Even if the agent has learned the desired behaviors well through reward engineering, it may still take unsafe actions.
+  \item This can happen due to reward hacking or because the agent encounters situations that it has never seen during training, that is, out-of-distribution cases.
+  \item Therefore, my research aims to learn a safe policy without relying on reward engineering.
+}
 
 % ============================================
 %         Constrained RL Page
@@ -315,6 +365,11 @@
 
 \subsection{Constrained Reinforcement Learning (Constrained RL)}
 
+\note[enumerate]
+{
+  \item In the next section I will introduce constrained reinforcement learning, which is one of the methodologies to address these challenges.
+}
+
 \begin{frame}{\insertsubsectionhead}
   \begin{figure}
     \includegraphics[width=0.35\textwidth]{figures/constrained-rl1.pdf}
@@ -322,6 +377,11 @@
   \end{figure}
 \end{frame}
 
+\note[enumerate]
+{
+  \item Unlike what we saw earlier in standard RL, constrained RL introduces an additional cost function.
+  \item Rewards encourage the desired behavior, while the cost function is used to discourage the undesired ones.
+}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \subsection{Constrained Policy Optimization Problem}
@@ -339,11 +399,22 @@
 
   \begin{itemize}
     \item <2-> Find a policy that maximizes rewards while satisfying constraints.
-    \item <3-> \textcolor{red}{Directly solving constrained optimization} is difficult.
-    \item <4-> By applying Lagrangian relaxation, we can \textcolor{blue}{convert it to an unconstrained problem.}
+    \item <3-> Directly solving \textcolor{red}{constrained optimization} is difficult.
+    \item <4-> By applying Lagrangian relaxation, we can convert it to an \textcolor{blue}{unconstrained problem.}
   \end{itemize}
 
 \end{frame}
+
+\note[enumerate]
+{
+  \item If we express this in equations, it looks like this.
+  \item At each step, the agent receives both a reward and a cost.
+  \item The goal is to find a policy that maximizes the cumulative reward, while keeping the cumulative cost below a threshold d.
+  \item In other words, the value of the cumulative cost becomes the constraint. 
+  \item However, solving this problem directly is difficult.
+  \item There are several approaches to solve this problem, but here I will only explain the method of transforming it into an unconstrained problem using Lagrangian relaxation.
+}
+
 
 \begin{frame}{\insertsubsectionhead}
 
@@ -368,18 +439,39 @@
 
 \end{frame}
 
+\note[enumerate]
+{
+  \item The transformed equation is as follows.
+  \item The Lagrange multiplier is a scalar, and it is increased when the constraint is violated and decreased when the constraint is satisfied.
+  \item In this way, it encourages the policy to satisfy the constraints.
+}
+
+\begin{frame}{\insertsubsectionhead}
+  \begin{figure}
+    \includegraphics[width=0.6\textwidth]{figures/ppo-lag.pdf}
+    \caption{Overview of the Constrained RL with Lagrangian relaxation}
+  \end{figure}
+\end{frame}
+
 \begin{frame}{\insertsubsectionhead}
 
-  In CMDPs \cite{altman2021constrained}, constraints are imposed on the trajectory level.
+  In Constrained RL, constraints are imposed on the trajectory level.
 
   \begin{figure}
     \includegraphics[width=0.3\textwidth]{figures/constrained-rl2.pdf}
-    \caption{CMDP example — agent trajectory with rewards (blue) and costs (red)}
+    \caption{Constrained RL example — agent trajectory with rewards (blue) and costs (red)}
   \end{figure}
 
   \uncover<2->{\textbf{Wouldn’t imposing constraints at the state level allow for more precise constraint enforcement?}}
 
 \end{frame}
+
+\note[enumerate]
+{
+  \item Earlier, I metioned that the constraint is defined so that the total cost accumulated until the end of an episode does not exceed threshold.
+  \item As shown in the figure, this corresponds to imposing the constraint at the trajectory level.
+  \item However, since there are many uncertainties from beginning to the end of an episode, one may wonder if it would be better to impose the constraint at each state, step by step, rather than only at the trajectory level.
+}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -391,10 +483,17 @@
 
   \begin{figure}
     \includegraphics[width=0.25\textwidth]{figures/statewise-constrained-rl.pdf}
-    \caption{State-wise constrained MDP example — agent trajectory with rewards (blue) and costs (red)}
+    \caption{State-wise constrained RL example — agent trajectory with rewards (blue) and costs (red)}
   \end{figure}
 
 \end{frame}
+
+\note[enumerate]
+{
+  \item This was actually the topic of my master's thesis.
+  \item In fact, this idea was suggested by professor.
+  \item Previously, the constraint was defined at the trajectory level, but now it is defined at each state.
+}
 
 \begin{frame}{\insertsubsectionhead}{Proposed Method}
 
@@ -415,6 +514,23 @@
 
 \end{frame}
 
+\note[enumerate]
+{
+  \item If we express this in equation, it looks like this.
+  \item Previously, the Lagrange multiplier was a scalar, but now it becomes a network, so that different multipliers are used for different states.
+  \item As I mentioned before, the network is updated so that the multiplier decreases when the constraint is satisfied, and increases when it is not.
+}
+
+\begin{frame}{\insertsubsectionhead}{Proposed Method}
+
+  \begin{figure}
+    \includegraphics[width=0.6\textwidth]{figures/ppo-lagnet.pdf}
+    \caption{Overview of the proposed method}
+  \end{figure}
+
+\end{frame}
+
+
 \begin{frame}{\insertsubsectionhead}{Comparison of Methods}
 
   {
@@ -422,11 +538,18 @@
       \includegraphics[width=0.45\textwidth]{figures/result_reward.pdf}
       \hspace{1cm}
       \includegraphics[width=0.45\textwidth]{figures/result_cost.pdf}
-      \caption{Performance comparison on Safety Gym tasks}
+      \caption{Performance comparison on Safety Gym Point Goal tasks}
     \end{figure}
   }
 
 \end{frame}
+
+\note[enumerate]
+{
+  \item This figure shows the performance comparison on Safety Gym Point Goal tasks.
+  \item The left graph shows the cumulative reward, and the right graph shows the cumulative cost.
+  \item As you can see, the proposed method achieves higher rewards while maintaining lowest costs compared to other methods.
+}
 
 \begin{frame}{\insertsubsectionhead}{Comparison of Methods}
 
@@ -472,6 +595,14 @@
 
 \end{frame}
 
+\note[enumerate]
+{
+  \item This is a test video.
+  \item In the case of PPO, since it does not take constraints into account, we can see that the agent steps on obstacles.
+  \item Even with constrained RL, because the constraint is imposed at the trajectory level, constraint violations still occur.
+  \item In contrast, with the proposed method, the constraints are considered more finely, and we can see that the agent satisfies the constraint.
+}
+
 \begin{frame}{\insertsubsectionhead}{Limitations of the Proposed Method}
 
   Limitations of the Proposed Approach
@@ -488,6 +619,15 @@
 
 \end{frame}
 
+\note[enumerate]
+{
+  \item However, the proposed method also has some limitations.
+  \item First, the Lagrangian method itself is inherently sensitive to the initial value and the learning rate.
+  \item Second, setting the constraint threshold is difficult.
+  \item If it is set too strictly, the policy becomes overly conservative, and if it is set too loosely, the constraints are not enforced.
+  \item Lastly, since enough constraint violations are required for training, therefore, training has to be conducted in a simulation environment.
+}
+
 % ============================================
 %         Conclusion Page
 % ============================================
@@ -498,14 +638,21 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \subsection{Summary}
 
+\note[enumerate]
+{
+  \item Finally, the conclusion.
+  \item I will briefly summarize what I have explained so far.
+  \item And I will also explain what I plan to do in the future.
+}
+
 \begin{frame}{\insertsubsectionhead}
 
   \begin{itemize}
-    \item <2-> Major companies focus on supervised learning for autonomous driving
-    \item <3-> Supervised learning is costly and data-dependent
-    \item <4-> Reinforcement learning can learn policies in simulation and transfer to the real world
-    \item <5-> Risk of unsafe behavior due to the Sim2Real gap
-    \item <6-> Research direction: state-wise constrained policy learning
+    \item <2-> Challenges in applying RL to the real world
+    \item <3-> Reward engineering is needed for diverse behaviors
+    \item <4-> Constrained RL enables learning without reward engineering
+    \item <5-> Constrained RL imposes constraints at the trajectory level
+    \item <6-> Extension to state-wise constrained RL
   \end{itemize}
 
   \vspace{0.5cm}
@@ -514,6 +661,16 @@
 
 \end{frame}
 
+\note[enumerate]
+{
+  \item There are several challenges in applying reinforcement learning to the real world.
+  \item To make an agent learn diverse behaviors, reward engineering is required.
+  \item However, constrained RL allows learning without reward engineering.
+  \item In constrained RL, constraints are imposed at the trajectory level.
+  \item In my master's thesis, I extended this to state-wise constrained RL.
+  \item However, there are still challenges to solve.
+}
+
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \subsection{Future Work}
@@ -521,10 +678,40 @@
 \begin{frame}{\insertsubsectionhead}
 
   \begin{itemize}
-    \item <2-> Extension to Model-Based RL
+    \item <2-> Hard to set appropriate constraint threshold $\rightarrow$ Curriculum learning \cite{weng2020curriculum, kim2024not}
   \end{itemize}
 
+  \uncover<2->{
+    \begin{figure}
+      \includegraphics[width=0.3\textwidth]{figures/curriculum-learning.png}
+      \caption{Curriculum learning overview}
+    \end{figure}
+  }
+
+  \begin{itemize}
+    \item <3-> Constraint violations during training $\rightarrow$ Combine with Model-Based methods \cite{chua2018deep, liu2020safe, jayant2022model, paolo2022guided}
+  \end{itemize}
+
+  \vspace{0.5cm}
+  
+  \uncover<3->{
+    \begin{figure}
+      \includegraphics[width=0.4\textwidth]{figures/model-based.jpg}
+      \caption{Model-Based RL overview}
+    \end{figure}
+  }
+
 \end{frame}
+
+\note[enumerate]
+{
+  \item First, there is the problem of setting an appropriate codenstriant threshold.
+  \item To address this, I think curriculum learning can be helpful, where the agent starts with easier tasks and gradually moves to more difficult ones.
+  \item This can support setting appropriate constraint thresholds.
+  \item In addition, there is the issue that, during training, the agent must frequently violate the constraints.
+  \item To reduce this, I expect that combining model-based methods can be helpful.
+  \item By using a learned model for planning, the agent can learn safe policies with fewer constraint violations.
+}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -537,6 +724,14 @@
     \centering \Large
     \emph{Thank you for your attention!}
 \end{frame}
+
+\note[enumerate]
+{
+  \item This concludes my presentation.
+  \item Thanky you for your attention.
+  \item If you have any questions, please feel free to ask.
+}
+
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
