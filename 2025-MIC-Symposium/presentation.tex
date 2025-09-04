@@ -302,6 +302,15 @@
   \item Agent receives a positive reward as it approaches the goal.
 }
 
+\begin{frame}{\insertsubsectionhead}
+
+  \begin{figure}
+    \includegraphics[width=0.3\textwidth]{figures/reward-engineering.pdf}
+    \caption{Illustration of reward engineering: shaping the reward signal to guide the agent's learning process.}
+  \end{figure}
+
+\end{frame}
+
 
 \begin{frame}{\insertsubsectionhead}{Objective of RL}
   \begin{itemize}
@@ -427,7 +436,7 @@
 
   \vspace{0.5cm}
 
-  \begin{equation}
+  \begin{equation} \label{eq:lagrange-multiplier-update}
     \lambda \leftarrow \left[ \lambda + \beta\left( \hat{J}_c - d \right) \right]_+
   \end{equation}
 
@@ -609,10 +618,10 @@
 
   \begin{itemize}
     \item<1-> Sensitivity to Lagrange multiplier (init., learning rate)
-    \item<2-> Constraint threshold setting is difficult
+    \item<2-> Difficulty in setting an appropriate Lagrange multiplier
       \begin{itemize}
-        \item<2-> Too strict → overly conservative policy
-        \item<2-> Too lenient → constraints not enforced
+        \item<2-> Too large → overly conservative policy
+        \item<2-> Too small → constraints not enforced
       \end{itemize}
     \item<3-> Needs sufficient violations during training
   \end{itemize}
@@ -623,8 +632,8 @@
 {
   \item However, the proposed method also has some limitations.
   \item First, the Lagrangian method itself is inherently sensitive to the initial value and the learning rate.
-  \item Second, setting the constraint threshold is difficult.
-  \item If it is set too strictly, the policy becomes overly conservative, and if it is set too loosely, the constraints are not enforced.
+  \item Second, setting the Lagrange multiplier is difficult.
+  \item If it is set too large, the policy becomes overly conservative, and if it is set too small, the constraints are not enforced.
   \item Lastly, since enough constraint violations are required for training, therefore, training has to be conducted in a simulation environment.
 }
 
@@ -648,8 +657,8 @@
 \begin{frame}{\insertsubsectionhead}
 
   \begin{itemize}
-    \item <2-> Challenges in applying RL to the real world
-    \item <3-> Reward engineering is needed for diverse behaviors
+    \item <2-> Reward engineering is needed for diverse behaviors
+    \item <3-> Even with reward engineering, agents may still take unsafe actions
     \item <4-> Constrained RL enables learning without reward engineering
     \item <5-> Constrained RL imposes constraints at the trajectory level
     \item <6-> Extension to state-wise constrained RL
@@ -678,18 +687,11 @@
 \begin{frame}{\insertsubsectionhead}
 
   \begin{itemize}
-    \item <2-> Hard to set appropriate constraint threshold $\rightarrow$ Curriculum learning \cite{weng2020curriculum, kim2024not}
+    \item <2-> Hard to set appropriate Lagrange multiplier $\rightarrow$ ? \cite{jaderberg2017population, stooke2020responsive}
   \end{itemize}
 
-  \uncover<2->{
-    \begin{figure}
-      \includegraphics[width=0.3\textwidth]{figures/curriculum-learning.png}
-      \caption{Curriculum learning overview}
-    \end{figure}
-  }
-
   \begin{itemize}
-    \item <3-> Constraint violations during training $\rightarrow$ Combine with Model-Based methods \cite{chua2018deep, liu2020safe, jayant2022model, paolo2022guided}
+    \item <3-> Needs sufficient violations during training $\rightarrow$ Model-Based methods \cite{chua2018deep, liu2020safe, jayant2022model, paolo2022guided, hsu2022improving} or Curriculum Learning  \cite{weng2020curriculum}
   \end{itemize}
 
   \vspace{0.5cm}
@@ -705,13 +707,59 @@
 
 \note[enumerate]
 {
-  \item First, there is the problem of setting an appropriate codenstriant threshold.
-  \item To address this, I think curriculum learning can be helpful, where the agent starts with easier tasks and gradually moves to more difficult ones.
-  \item This can support setting appropriate constraint thresholds.
-  \item In addition, there is the issue that, during training, the agent must frequently violate the constraints.
+  \item First, there is the problem of setting an appropriate Lagrange multiplier.
+  \item Second, the agent must frequently violate the constraints during training.
   \item To reduce this, I expect that combining model-based methods can be helpful.
   \item By using a learned model for planning, the agent can learn safe policies with fewer constraint violations.
 }
+
+\begin{frame}{\insertsubsectionhead}{PID Lagrangian Methods \cite{stooke2020responsive}}
+
+  \begin{equation}
+    \begin{aligned}
+      \theta^* &= \arg\max_\theta \mathcal{L}(\theta, \lambda) \\
+      \mathcal{L}(\theta, \lambda) &= \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum^T_{t = 0} r_t \right] - \lambda \left( \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum^T_{t = 0} c_t \right] - d \right)
+    \end{aligned}
+    \tag{3}
+  \end{equation}
+
+  \begin{equation}
+    \lambda \leftarrow \left[ \lambda + \beta\left( \hat{J}_c - d \right) \right]_+
+    \tag{4}
+  \end{equation}
+
+  \vspace{0.5cm}
+
+  \begin{quote}
+    \begin{itemize}
+      \item The Lagrange multiplier update rule for an inequality constraint uses subgradient descent (Eq.~\ref{eq:lagrange-multiplier-update}).
+      \item This update step is clearly an integral control rule.
+      \item The proportional term will hasten the response to constraint violations and dampen oscillations.
+      \item The derivative control can act in anticipation of violations.
+    \end{itemize}
+  \end{quote}
+  
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Recovery Action \cite{hsu2022improving}}
+
+  \begin{figure}
+    \includegraphics[width=0.6\textwidth]{figures/recovery-action.png}
+    \caption{Recovery action overview}
+  \end{figure}
+
+  If the state is considered to be risky $(c_t \geq \hat{c})$, look up the safety buffer $D$ to find the best recovery action.
+  
+  \vspace{0.5cm}
+
+  Safety Buffer $D$
+
+  \begin{itemize}
+    \item Recovery actions are defined by $c_t \geq \hat{c}$ and $c_{t + 1} < \hat{c}$.
+    \item Safety buffer stores a tuple of $(b_t, a_t, r_t)$, and clusters all the tuples in the feature space $b_t$.
+  \end{itemize}
+
+\end{frame}
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
