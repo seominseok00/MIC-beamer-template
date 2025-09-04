@@ -188,21 +188,78 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-\subsection{Reinforcement Learning}
+\subsection{Reinforcement Learning (RL)}
 
 \begin{frame}{\insertsubsectionhead}
 
-  Insert Reinforcement Learning example
+  \centering
+  \begin{columns}[T,totalwidth=\textwidth]
+    % Alphago
+    \column{0.32\textwidth}
+      \centering
+      \textbf{Alpha Go} \cite{silver2016mastering}
+      \includegraphics[width=\linewidth,height=0.5625\linewidth]{figures/alphago.jpg}
+
+    % DQN
+    \column{0.32\textwidth}
+      \centering
+      \textbf{Deep Q-Network} \cite{mnih2013playing}
+      \includemedia[
+        width=\linewidth,
+        height=0.5625\linewidth,
+        activate=pageopen,
+        addresource=figures/dqn.mp4,
+        flashvars={source=figures/dqn.mp4&autoPlay=true&loop=true}
+      ]{}{VPlayer.swf}
+
+    % Walker
+    \column{0.32\textwidth}
+      \centering
+      \textbf{Proximal Policy Optimization} \cite{schulman2017proximal}
+      \includemedia[
+        width=\linewidth,
+        height=0.5625\linewidth,
+        activate=pageopen,
+        addresource=figures/walker.mp4,
+        flashvars={source=figures/walker.mp4&autoPlay=true&loop=true}
+      ]{}{VPlayer.swf}
+  \end{columns}
 
 \end{frame}
 
 \begin{frame}{\insertsubsectionhead}
 
-  Insert Reinforcement Learning framework
+  \begin{figure}
+    \includegraphics[width=0.6\textwidth]{figures/rl1.pdf}
+    \caption{Overview of the reinforcement learning framework}
+  \end{figure}
 
 \end{frame}
 
 \begin{frame}{\insertsubsectionhead}
+
+  \begin{figure}
+    \includegraphics[width=0.3\textwidth]{figures/rl2.pdf}
+    \caption{Illustration of sequential decision making: the agent receives a reward after each action.}
+  \end{figure}
+
+\end{frame}
+
+
+\begin{frame}{\insertsubsectionhead}
+
+  \begin{figure}
+    \includegraphics[width=0.3\textwidth]{figures/reward-engineering.pdf}
+    \caption{Illustration of reward engineering: shaping the reward signal to guide the agent's learning process.}
+  \end{figure}
+
+\end{frame}
+
+\begin{frame}{\insertsubsectionhead}{Objective of RL}
+  \begin{itemize}
+    \item Policy parameterized by $\theta$, denoted as $\pi_\theta(a|s)$
+    \item Goal: find the optimal policy $\pi^*_\theta$ that maximizes the expected cumulative reward
+  \end{itemize}
 
   \begin{equation}
     \begin{aligned}
@@ -213,16 +270,8 @@
 
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
 
-  \begin{figure}
-    \includegraphics[width=0.3\textwidth]{figures/rl.pdf}
-    \caption{Reinforcement Learning Framework}
-  \end{figure}
-
-\end{frame}
-
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}{\insertsubsectionhead}{Challenges of RL}
 
   \begin{enumerate}
     \item<1-> Needs \textcolor{red}{simulation}, not labeled data
@@ -264,12 +313,12 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-\subsection{Constrained Markov Decision Processes (CMDP)}
+\subsection{Constrained Reinforcement Learning (Constrained RL)}
 
 \begin{frame}{\insertsubsectionhead}
   \begin{figure}
     \includegraphics[width=0.35\textwidth]{figures/constrained-rl1.pdf}
-    \caption{CMDP example — agent trajectory with rewards (blue) and costs (red)}
+    \caption{Constrained RL example — agent trajectory with rewards (blue) and costs (red)}
   \end{figure}
 \end{frame}
 
@@ -290,8 +339,8 @@
 
   \begin{itemize}
     \item <2-> Find a policy that maximizes rewards while satisfying constraints.
-    \item <3-> Directly solving constrained optimization is difficult.
-    \item <4-> By applying Lagrangian relaxation, we can convert it to an unconstrained problem.
+    \item <3-> \textcolor{red}{Directly solving constrained optimization} is difficult.
+    \item <4-> By applying Lagrangian relaxation, we can \textcolor{blue}{convert it to an unconstrained problem.}
   \end{itemize}
 
 \end{frame}
@@ -321,10 +370,10 @@
 
 \begin{frame}{\insertsubsectionhead}
 
-  In CMDPs, constraints are imposed on the trajectory level.
+  In CMDPs \cite{altman2021constrained}, constraints are imposed on the trajectory level.
 
   \begin{figure}
-    \includegraphics[width=0.25\textwidth]{figures/constrained-rl2.pdf}
+    \includegraphics[width=0.3\textwidth]{figures/constrained-rl2.pdf}
     \caption{CMDP example — agent trajectory with rewards (blue) and costs (red)}
   \end{figure}
 
@@ -334,7 +383,7 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-\subsection{Proposed Approach: State-wise Constrained Policy Optimization}
+\subsection{State-wise Constrained Policy Optimization}
 
 \begin{frame}{\insertsubsectionhead}
 
@@ -347,7 +396,7 @@
 
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}{\insertsubsectionhead}{Proposed Method}
 
   \begin{equation}
     \begin{aligned}
@@ -366,7 +415,7 @@
 
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}{\insertsubsectionhead}{Comparison of Methods}
 
   {
     \begin{figure}
@@ -379,13 +428,51 @@
 
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}{\insertsubsectionhead}{Comparison of Methods}
 
-  Insert video
+  \centering
+  \begin{columns}[T,totalwidth=\textwidth]
+    % PPO
+    \column{0.32\textwidth}
+      \centering
+      \textbf{PPO}
+      \includemedia[
+        width=\linewidth,
+        height=0.5625\linewidth,
+        activate=pageopen,
+        addresource=figures/ppo-5121.mp4,
+        flashvars={source=figures/ppo-5121.mp4&autoPlay=true&loop=true}
+      ]{}{VPlayer.swf}
+
+    % PPO Lagrangian
+    \column{0.32\textwidth}
+      \centering
+      \textbf{PPO Lagrangian}
+      \includemedia[
+        width=\linewidth,
+        height=0.5625\linewidth,
+        activate=pageopen,
+        addresource=figures/ppo_lag-5121.mp4,
+        flashvars={source=figures/ppo_lag-5121.mp4&autoPlay=true&loop=true}
+      ]{}{VPlayer.swf}
+
+    % Proposed Method
+    \column{0.32\textwidth}
+      \centering
+      \textbf{Proposed Method}
+      \includemedia[
+        width=\linewidth,
+        height=0.5625\linewidth,
+        activate=pageopen,
+        addresource=figures/ppo_lagnet-5121.mp4,
+        flashvars={source=figures/ppo_lagnet-5121.mp4&autoPlay=true&loop=true}
+      ]{}{VPlayer.swf}
+
+  \end{columns}
 
 \end{frame}
 
-\begin{frame}{\insertsubsectionhead}
+\begin{frame}{\insertsubsectionhead}{Limitations of the Proposed Method}
 
   Limitations of the Proposed Approach
 
@@ -457,14 +544,6 @@
 
   \bibliography{localRefs}
   \bibliographystyle{IEEEtran}
-
-\end{frame}
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-\begin{frame}{Appendix}
-  
-  \textbf{If you need!} or remove this frame.
 
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
